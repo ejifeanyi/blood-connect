@@ -1,33 +1,37 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
 const TopDonors = () => {
-	const donors = [
-		{
-			name: "John Doe",
-			pic: "https://via.placeholder.com/150",
-			bloodType: "A+",
-			tag: "General",
-		},
-		{
-			name: "Jane Smith",
-			pic: "https://via.placeholder.com/150",
-			bloodType: "O-",
-			tag: "Recruit",
-		},
-		{
-			name: "Mike Johnson",
-			pic: "https://via.placeholder.com/150",
-			bloodType: "B+",
-			tag: "General",
-		},
-		// Add more donor objects as needed
-	];
+	const [topDonors, setTopDonors] = useState([]);
+
+	useEffect(() => {
+		const fetchTopDonors = async () => {
+			try {
+				const response = await axios.get(
+					"https://bc-latest.onrender.com/donations/top-donors",
+					{
+						params: {
+							bloodGroup: "A+",
+						},
+					}
+				);
+				console.log(response.data.data);
+				setTopDonors(response.data.data.donations);
+			} catch (error) {
+				console.error("Error fetching blood banks:", error);
+			}
+		};
+
+		fetchTopDonors();
+	}, []);
 
 	return (
 		<div className="mt-16">
-			<h1 className="font-semibold text-[#333] text-[30px] mb-6">Top Donors</h1>
+			<h1 className="font-semibold text-[#333] text-xl mb-4 md:text-[30px] md:mb-6">
+				Top Donors
+			</h1>
 			<div className="flex items-center gap-[32px] overflow-x-scroll">
-				{donors.map((donor, index) => (
+				{topDonors.map((donor, index) => (
 					<div
 						key={index}
 						className="flex flex-col gap-1"

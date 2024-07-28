@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+
 import Image from "next/image";
 import axios from "axios";
 
@@ -12,6 +12,7 @@ const Page = () => {
 	const { id } = params;
 	console.log("Hospital ID:", id);
 	const [hospital, setHospital] = useState(null);
+	const router = useRouter();
 
 	useEffect(() => {
 		if (id) {
@@ -31,13 +32,16 @@ const Page = () => {
 		}
 	}, [id]);
 
+	const handleContinue = () => {
+		router.push(`/donate/${id}`);
+	};
+
 	if (!hospital) {
 		return <p>Loading...</p>;
 	}
 
 	return (
 		<div>
-			{/* <Nav /> */}
 			<div className="mt-[90px] px-5 sm:px-[100px]">
 				<div className="flex flex-col items-center justify-center">
 					<h1 className="text-[30px] font-bold text-[#333] mb-[14px]">
@@ -69,30 +73,15 @@ const Page = () => {
 						Wanna Donate Blood and Save Life?
 					</h2>
 					<p className="text-[#5C5C5C] text-sm sm:text-base max-w-[545px]">
-						Lorem Ipsum is simply dummy text of the printing and typesetting
-						industry.
+						By clicking continue, you will be able to book your date to donate
+						your blood to this hospital.
 					</p>
-				</div>
-
-				<div className="w-full bg-[#333] rounded-[14px] py-5 sm:py-10 px-5 sm:px-14 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-8 mb-20">
-					<div>
-						<h3 className="text-white font-medium text-xl sm:text-[30px] mb-1">
-							Start Here
-						</h3>
-						<p className="max-w-[636px] text-sm sm:text-base text-white">
-							By clicking continue, you will be able to book your date to donate
-							your blood to this hospital.
-						</p>
-					</div>
-					<form className="flex items-center bg-white p-1 rounded-[8px]">
-						<Input
-							placeholder="Enter email address"
-							className="placeholder:text-[#898989] font-light mr-2 text-xs outline-none focus:outline-none"
-						/>
-						<Button className="bg-[#F95655] text-xs font-light text-white">
-							Continue
-						</Button>
-					</form>
+					<Button
+						className="bg-[#F95655] text-xs font-light text-white mt-5"
+						onClick={handleContinue}
+					>
+						Continue
+					</Button>
 				</div>
 			</div>
 		</div>
